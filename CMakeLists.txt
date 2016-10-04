@@ -3,9 +3,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 FIND_PACKAGE(OpenCV REQUIRED)
 FIND_PACKAGE(CUDA REQUIRED)
 
-# FILE(GLOB SOURCES "*.cu" "*.cpp" "*.c" "cuh" "*.h" "*.hpp")
-FILE(GLOB SOURCES "*.cpp" "*.c" "*.h" "*.hpp")
-
+FILE(GLOB SOURCES "*.cu" "*.cpp" "*.c" "cuh" "*.h" "*.hpp")
 
 IF(CUDA_FOUND)
   SET(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS};-std c++11")

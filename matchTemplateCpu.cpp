@@ -1,5 +1,6 @@
 ﻿#include "matchTemplateCpu.h"
 #include <opencv2/imgproc.hpp>
+#include <stdlib.h>
 
 void matchTemplateCpu
 (
@@ -17,7 +18,7 @@ void matchTemplateCpu
                 const uchar* ptempl = templ.ptr<uchar>(yy);
                 for(int xx = 0; xx < templ.cols; xx++){
                     int diff = pimg[x + xx] - ptempl[xx];
-                    sum += (diff*diff);
+                    sum += abs(diff);
                 }
             }
             presult[x] = sum;
