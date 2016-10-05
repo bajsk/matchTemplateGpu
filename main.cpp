@@ -32,10 +32,15 @@ int main(int argc, char *argv[])
     time = launchMatchTemplateGpu(d_img, d_templ, d_result, loop_num);
     std::cout << "CUDA: " << time << " ms." << std::endl;
 
+    // CUDA Implementation (static shared memory)
+    time = launchMatchTemplateGpu_opt(d_img, d_templ, d_result2, loop_num);
+    std::cout << "CUDA(opt): " << time << " ms." << std::endl;
+
     std::cout << std::endl;
 
     // Verification
     verify(result, d_result);
+    verify(result, d_result2);
 
     return 0;
 }
