@@ -73,7 +73,7 @@ double launchMatchTemplateGpu
 }
 
 // use static shared memory
-__global__ void matchTemplateGpu_opt
+__global__ void matchTemplateGpu_withStaticSharedMemory
 (
  const cv::gpu::PtrStepSz<uchar> img,
  const cv::gpu::PtrStepSz<uchar> templ,
@@ -107,7 +107,7 @@ __global__ void matchTemplateGpu_opt
 }
 
 // use shared memory
-void launchMatchTemplateGpu_opt
+void launchMatchTemplateGpu_withStaticSharedMemory
 (
  cv::gpu::GpuMat& img,
  cv::gpu::GpuMat& templ,
@@ -125,16 +125,15 @@ void launchMatchTemplateGpu_opt
 
   const dim3 block(64, 2);
   const dim3 grid(cv::gpu::divUp(result.cols, block.x), cv::gpu::divUp(result.rows, block.y));
-  const size_t shared_mem_size = templ.cols*templ.rows*sizeof(uchar);
 
-  matchTemplateGpu_opt<<<grid, block>>>(pImg, pDst, pResult);
+  matchTemplateGpu_withStaticSharedMemory<<<grid, block>>>(pImg, pDst, pResult);
 
   cudaSafeCall(cudaGetLastError());
   cudaSafeCall(cudaDeviceSynchronize());
 }
 
 // use shared memory
-double launchMatchTemplateGpu_opt
+double launchMatchTemplateGpu_withStaticSharedMemory
 (
  cv::gpu::GpuMat& img, 
  cv::gpu::GpuMat& templ, 
@@ -147,7 +146,7 @@ double launchMatchTemplateGpu_opt
   double time = 0.0;
   for (int i = 0; i <= loop_num; i++){
     start = cv::getTickCount();
-    launchMatchTemplateGpu_opt(img, templ, result);
+    launchMatchTemplateGpu_withStaticSharedMemory(img, templ, result);
     end = cv::getTickCount();
     time += (i > 0) ? ((end - start) * f) : 0;
   }
