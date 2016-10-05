@@ -39,11 +39,11 @@ int main(int argc, char *argv[])
 
     // CUDA Implementation (static shared memory)
     time = launchMatchTemplateGpu_withStaticSharedMemory(d_img, d_templ, d_result2, loop_num);
-    std::cout << "CUDA(opt): " << time << " ms." << std::endl;
+    std::cout << "CUDA(withStaticSharedMemory): " << time << " ms." << std::endl;
 
     // CUDA Implementation (dynamic shared memory)
     time = launchMatchTemplateGpu_withDynamicSharedMemory(d_img, d_templ, d_result3, loop_num);
-    std::cout << "CUDA(opt2): " << time << " ms." << std::endl;
+    std::cout << "CUDA(withDynamicSharedMemory): " << time << " ms." << std::endl;
 
     std::cout << std::endl;
 

@@ -106,6 +106,7 @@ __global__ void matchTemplateGpu_withStaticSharedMemory
   }
 }
 
+
 // use static shared memory
 void launchMatchTemplateGpu_withStaticSharedMemory
 (
@@ -215,6 +216,7 @@ void launchMatchTemplateGpu_withDynamicSharedMemory
   cudaSafeCall(cudaGetLastError());
   cudaSafeCall(cudaDeviceSynchronize());
 }
+
 
 // use dynamic shared memory
 double launchMatchTemplateGpu_withDynamicSharedMemory
