@@ -6,5 +6,8 @@
 
 double launchMatchTemplateGpu(cv::gpu::GpuMat& img, cv::gpu::GpuMat& templ, cv::gpu::GpuMat& result, const int loop_num);
 
-// use shared memory
-double launchMatchTemplateGpu_opt(cv::gpu::GpuMat& img, cv::gpu::GpuMat& templ, cv::gpu::GpuMat& result, const int loop_num);
+// use static shared memory
+double launchMatchTemplateGpu_withStaticSharedMemory(cv::gpu::GpuMat& img, cv::gpu::GpuMat& templ, cv::gpu::GpuMat& result, const int loop_num);
+
+// use dynamic shared memory
+double launchMatchTemplateGpu_withDynamicSharedMemory(cv::gpu::GpuMat& img, cv::gpu::GpuMat& templ, cv::gpu::GpuMat& result, const int loop_num);
