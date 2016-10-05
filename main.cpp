@@ -22,7 +22,20 @@ int main(int argc, char *argv[])
     time = launchMatchTemplateCV(img, templ, result_cv, loop_num);
     std::cout << "OpenCV: " << time << " ms." << std::endl;
 
+    cv::gpu::GpuMat d_img(img);
+    cv::gpu::GpuMat d_templ(templ);
+    cv::gpu::GpuMat d_result(corrSize, CV_32FC1, cv::Scalar(0.0f));
+    cv::gpu::GpuMat d_result2(corrSize, CV_32FC1, cv::Scalar(0.0f));
+    cv::gpu::GpuMat d_result3(corrSize, CV_32FC1, cv::Scalar(0.0f));
+
+    // CUDA Implementation
+    time = launchMatchTemplateGpu(d_img, d_templ, d_result, loop_num);
+    std::cout << "CUDA: " << time << " ms." << std::endl;
+
     std::cout << std::endl;
+
+    // Verification
+    verify(result, d_result);
 
     return 0;
 }
