@@ -256,7 +256,7 @@ __global__ void matchTemplateGpu_withStaticSharedMemory_withLoopUnrolling
 
   if(threadIdx.x == 0){
     for(int yy = 0; yy < templ.rows; yy++){
-#pragma unroll 4
+      #pragma unroll 4
       for(int xx = 0; xx < templ.cols; xx += 4){
 	temp[yy*templ.cols+xx] = templ.ptr(yy)[xx];
 	temp[yy*templ.cols+xx+1] = templ.ptr(yy)[xx+1];
@@ -270,7 +270,7 @@ __global__ void matchTemplateGpu_withStaticSharedMemory_withLoopUnrolling
   if((x < result.cols) && (y < result.rows)){
     long sum = 0;
     for(int yy = 0; yy < templ.rows; yy++){
-#pragma unroll 4
+      #pragma unroll 4
       for(int xx = 0; xx < templ.cols; xx += 4){
 	int diff = abs(img.ptr((y+yy))[x+xx] - temp[yy*templ.cols+xx]);
 	diff += abs(img.ptr((y+yy))[x+xx+1] - temp[yy*templ.cols+xx+1]);
@@ -348,7 +348,7 @@ __global__ void matchTemplateGpu_withDynamicSharedMemory_withLoopUnrolling
 
   if(threadIdx.x == 0){
     for(int yy = 0; yy < templ.rows; yy++){
-#pragma unroll 4
+      #pragma unroll 4
       for(int xx = 0; xx < templ.cols; xx += 4){
 	temp[yy*templ.cols+xx] = templ.ptr(yy)[xx];
 	temp[yy*templ.cols+xx+1] = templ.ptr(yy)[xx+1];
@@ -362,7 +362,7 @@ __global__ void matchTemplateGpu_withDynamicSharedMemory_withLoopUnrolling
   if((x < result.cols) && (y < result.rows)){
     long sum = 0;
     for(int yy = 0; yy < templ.rows; yy++){
-#pragma unroll 4
+      #pragma unroll 4
       for(int xx = 0; xx < templ.cols; xx += 4){
 	int diff = abs(img.ptr((y+yy))[x+xx] - temp[yy*templ.cols+xx]);
 	diff = abs(img.ptr((y+yy))[x+xx+1] - temp[yy*templ.cols+xx+1]);
