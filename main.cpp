@@ -32,6 +32,7 @@ int main(int argc, char *argv[])
     cv::gpu::GpuMat d_result(corrSize, CV_32FC1, cv::Scalar(0.0f));
     cv::gpu::GpuMat d_result2(corrSize, CV_32FC1, cv::Scalar(0.0f));
     cv::gpu::GpuMat d_result3(corrSize, CV_32FC1, cv::Scalar(0.0f));
+    cv::gpu::GpuMat d_result4(corrSize, CV_32FC1, cv::Scalar(0.0f));
 
     // CUDA Implementation
     time = launchMatchTemplateGpu(d_img, d_templ, d_result, loop_num);
@@ -45,16 +46,16 @@ int main(int argc, char *argv[])
     time = launchMatchTemplateGpu_withDynamicSharedMemory(d_img, d_templ, d_result3, loop_num);
     std::cout << "CUDA(withDynamicSharedMemory): " << time << " ms." << std::endl;
 
+    // CUDA Implementation (static shared memory)
+    time = launchMatchTemplateGpu_withStaticSharedMemory_withLoopUnrolling(d_img, d_templ, d_result4, loop_num);
+    std::cout << "CUDA(withStaticSharedMemory_withLoopUnrolling): " << time << " ms." << std::endl;
+
     std::cout << std::endl;
 
-#ifdef VALIDATION
-
     // Verification
-    verify(result, d_result);
-    verify(result, d_result2);
-    verify(result, d_result3);
-
-#endif
+    verify(d_result, d_result2);
+    verify(d_result, d_result3);
+    verify(d_result, d_result4);
 
     return 0;
 }
