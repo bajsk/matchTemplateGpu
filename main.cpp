@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
     std::cout << "CUDA(withStaticSharedMemory_withLoopUnrolling): " << time << " ms." << std::endl;
 
     // CUDA Implementation (dynamic shared memory with loop unrolling)
-    time = launchMatchTemplateGpu_withDynamicSharedMemory(d_img, d_templ, d_result5, loop_num);
+    time = launchMatchTemplateGpu_withDynamicSharedMemory_withLoopUnrolling(d_img, d_templ, d_result5, loop_num);
     std::cout << "CUDA(withDynamicSharedMemory_withLoopUnrolling): " << time << " ms." << std::endl;
 
     std::cout << std::endl;

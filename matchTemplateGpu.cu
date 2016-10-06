@@ -365,9 +365,9 @@ __global__ void matchTemplateGpu_withDynamicSharedMemory_withLoopUnrolling
       #pragma unroll 4
       for(int xx = 0; xx < templ.cols; xx += 4){
 	int diff = abs(img.ptr((y+yy))[x+xx] - temp[yy*templ.cols+xx]);
-	diff = abs(img.ptr((y+yy))[x+xx+1] - temp[yy*templ.cols+xx+1]);
-	diff = abs(img.ptr((y+yy))[x+xx+2] - temp[yy*templ.cols+xx+2]);
-	diff = abs(img.ptr((y+yy))[x+xx+3] - temp[yy*templ.cols+xx+3]);
+	diff += abs(img.ptr((y+yy))[x+xx+1] - temp[yy*templ.cols+xx+1]);
+	diff += abs(img.ptr((y+yy))[x+xx+2] - temp[yy*templ.cols+xx+2]);
+	diff += abs(img.ptr((y+yy))[x+xx+3] - temp[yy*templ.cols+xx+3]);
 	sum += diff;
       }
     }
