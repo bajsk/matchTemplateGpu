@@ -21,10 +21,6 @@ int main(int argc, char *argv[])
     time = launchMatchTemplateCpu(img, templ, result, loop_num);
     std::cout << "Naive: " << time << " ms." << std::endl;
 
-    // OpenCV
-    time = launchMatchTemplateCV(img, templ, result_cv, loop_num);
-    std::cout << "OpenCV: " << time << " ms." << std::endl;
-
 #endif
 
     cv::gpu::GpuMat d_img(img);
@@ -33,6 +29,7 @@ int main(int argc, char *argv[])
     cv::gpu::GpuMat d_result2(corrSize, CV_32FC1, cv::Scalar(0.0f));
     cv::gpu::GpuMat d_result3(corrSize, CV_32FC1, cv::Scalar(0.0f));
     cv::gpu::GpuMat d_result4(corrSize, CV_32FC1, cv::Scalar(0.0f));
+    cv::gpu::GpuMat d_result5(corrSize, CV_32FC1, cv::Scalar(0.0f));
 
     // CUDA Implementation
     time = launchMatchTemplateGpu(d_img, d_templ, d_result, loop_num);
@@ -46,9 +43,13 @@ int main(int argc, char *argv[])
     time = launchMatchTemplateGpu_withDynamicSharedMemory(d_img, d_templ, d_result3, loop_num);
     std::cout << "CUDA(withDynamicSharedMemory): " << time << " ms." << std::endl;
 
-    // CUDA Implementation (static shared memory)
+    // CUDA Implementation (static shared memory with loop unrolling)
     time = launchMatchTemplateGpu_withStaticSharedMemory_withLoopUnrolling(d_img, d_templ, d_result4, loop_num);
     std::cout << "CUDA(withStaticSharedMemory_withLoopUnrolling): " << time << " ms." << std::endl;
+
+    // CUDA Implementation (dynamic shared memory with loop unrolling)
+    time = launchMatchTemplateGpu_withDynamicSharedMemory(d_img, d_templ, d_result5, loop_num);
+    std::cout << "CUDA(withDynamicSharedMemory_withLoopUnrolling): " << time << " ms." << std::endl;
 
     std::cout << std::endl;
 
@@ -56,6 +57,7 @@ int main(int argc, char *argv[])
     verify(d_result, d_result2);
     verify(d_result, d_result3);
     verify(d_result, d_result4);
+    verify(d_result, d_result5);
 
     return 0;
 }

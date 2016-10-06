@@ -14,3 +14,7 @@ double launchMatchTemplateGpu_withDynamicSharedMemory(cv::gpu::GpuMat& img, cv::
 
 // use static shared memory with loop unrolling
 double launchMatchTemplateGpu_withStaticSharedMemory_withLoopUnrolling(cv::gpu::GpuMat& img, cv::gpu::GpuMat& templ, cv::gpu::GpuMat& result, const int loop_num);
+
+// use dynamic shared memory with loop unrolling
+double launchMatchTemplateGpu_withDynamicSharedMemory_withLoopUnrolling(cv::gpu::GpuMat& img, cv::gpu::GpuMat& templ, cv::gpu::GpuMat& result, const int loop_num);
+
