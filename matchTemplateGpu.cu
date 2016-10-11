@@ -29,7 +29,8 @@ void launchMatchTemplateGpu
 (
     cv::gpu::GpuMat& img, 
     cv::gpu::GpuMat& templ, 
-    cv::gpu::GpuMat& result
+    cv::gpu::GpuMat& result,
+    const dim3 block
 )
 {
     cv::gpu::PtrStepSz<uchar> pImg =
@@ -41,7 +42,6 @@ void launchMatchTemplateGpu
     cv::gpu::PtrStepSz<float> pResult =
         cv::gpu::PtrStepSz<float>(result.rows, result.cols * result.channels(), result.ptr<float>(), result.step);
 
-    const dim3 block(64, 2);
     const dim3 grid(cv::gpu::divUp(result.cols, block.x), cv::gpu::divUp(result.rows, block.y));
 
     matchTemplateGpu<<<grid, block>>>(pImg, pDst, pResult);
@@ -55,6 +55,7 @@ double launchMatchTemplateGpu
     cv::gpu::GpuMat& img, 
     cv::gpu::GpuMat& templ, 
     cv::gpu::GpuMat& result, 
+    const dim3 block,
     const int loop_num
 )
 {
@@ -63,7 +64,7 @@ double launchMatchTemplateGpu
     double time = 0.0;
     for (int i = 0; i <= loop_num; i++){
         start = cv::getTickCount();
-        launchMatchTemplateGpu(img, templ, result);
+        launchMatchTemplateGpu(img, templ, result, block);
         end = cv::getTickCount();
         time += (i > 0) ? ((end - start) * f) : 0;
     }
@@ -112,7 +113,8 @@ void launchMatchTemplateGpu_withStaticSharedMemory
 (
  cv::gpu::GpuMat& img,
  cv::gpu::GpuMat& templ,
- cv::gpu::GpuMat& result
+ cv::gpu::GpuMat& result,
+ const dim3 block
  )
 {
   cv::gpu::PtrStepSz<uchar> pImg =
@@ -124,7 +126,6 @@ void launchMatchTemplateGpu_withStaticSharedMemory
   cv::gpu::PtrStepSz<float> pResult =
     cv::gpu::PtrStepSz<float>(result.rows, result.cols * result.channels(), result.ptr<float>(), result.step);
 
-  const dim3 block(64, 2);
   const dim3 grid(cv::gpu::divUp(result.cols, block.x), cv::gpu::divUp(result.rows, block.y));
 
   matchTemplateGpu_withStaticSharedMemory<<<grid, block>>>(pImg, pDst, pResult);
@@ -139,7 +140,8 @@ double launchMatchTemplateGpu_withStaticSharedMemory
  cv::gpu::GpuMat& img, 
  cv::gpu::GpuMat& templ, 
  cv::gpu::GpuMat& result, 
-    const int loop_num
+ const dim3 block,
+ const int loop_num
  )
 {
   double f = 1000.0f / cv::getTickFrequency();
@@ -147,7 +149,7 @@ double launchMatchTemplateGpu_withStaticSharedMemory
   double time = 0.0;
   for (int i = 0; i <= loop_num; i++){
     start = cv::getTickCount();
-    launchMatchTemplateGpu_withStaticSharedMemory(img, templ, result);
+    launchMatchTemplateGpu_withStaticSharedMemory(img, templ, result, block);
     end = cv::getTickCount();
     time += (i > 0) ? ((end - start) * f) : 0;
   }
@@ -195,7 +197,8 @@ void launchMatchTemplateGpu_withDynamicSharedMemory
 (
  cv::gpu::GpuMat& img,
  cv::gpu::GpuMat& templ,
- cv::gpu::GpuMat& result
+ cv::gpu::GpuMat& result,
+ const dim3 block
  )
 {
   cv::gpu::PtrStepSz<uchar> pImg =
@@ -207,7 +210,6 @@ void launchMatchTemplateGpu_withDynamicSharedMemory
   cv::gpu::PtrStepSz<float> pResult =
     cv::gpu::PtrStepSz<float>(result.rows, result.cols * result.channels(), result.ptr<float>(), result.step);
 
-  const dim3 block(64, 2);
   const dim3 grid(cv::gpu::divUp(result.cols, block.x), cv::gpu::divUp(result.rows, block.y));
   const size_t shared_mem_size = templ.cols*templ.rows*sizeof(uchar);
 
@@ -224,7 +226,8 @@ double launchMatchTemplateGpu_withDynamicSharedMemory
  cv::gpu::GpuMat& img, 
  cv::gpu::GpuMat& templ, 
  cv::gpu::GpuMat& result, 
-    const int loop_num
+ const dim3 block,
+ const int loop_num
  )
 {
   double f = 1000.0f / cv::getTickFrequency();
@@ -232,7 +235,7 @@ double launchMatchTemplateGpu_withDynamicSharedMemory
   double time = 0.0;
   for (int i = 0; i <= loop_num; i++){
     start = cv::getTickCount();
-    launchMatchTemplateGpu_withDynamicSharedMemory(img, templ, result);
+    launchMatchTemplateGpu_withDynamicSharedMemory(img, templ, result, block);
     end = cv::getTickCount();
     time += (i > 0) ? ((end - start) * f) : 0;
   }
@@ -289,7 +292,8 @@ void launchMatchTemplateGpu_withStaticSharedMemory_withLoopUnrolling
 (
  cv::gpu::GpuMat& img,
  cv::gpu::GpuMat& templ,
- cv::gpu::GpuMat& result
+ cv::gpu::GpuMat& result,
+ const dim3 block
  )
 {
   cv::gpu::PtrStepSz<uchar> pImg =
@@ -301,7 +305,6 @@ void launchMatchTemplateGpu_withStaticSharedMemory_withLoopUnrolling
   cv::gpu::PtrStepSz<float> pResult =
     cv::gpu::PtrStepSz<float>(result.rows, result.cols * result.channels(), result.ptr<float>(), result.step);
 
-  const dim3 block(64, 2);
   const dim3 grid(cv::gpu::divUp(result.cols, block.x), cv::gpu::divUp(result.rows, block.y));
 
   matchTemplateGpu_withStaticSharedMemory_withLoopUnrolling<<<grid, block>>>(pImg, pDst, pResult);
@@ -316,7 +319,8 @@ double launchMatchTemplateGpu_withStaticSharedMemory_withLoopUnrolling
  cv::gpu::GpuMat& img, 
  cv::gpu::GpuMat& templ, 
  cv::gpu::GpuMat& result, 
-    const int loop_num
+ const dim3 block,
+ const int loop_num
  )
 {
   double f = 1000.0f / cv::getTickFrequency();
@@ -324,7 +328,7 @@ double launchMatchTemplateGpu_withStaticSharedMemory_withLoopUnrolling
   double time = 0.0;
   for (int i = 0; i <= loop_num; i++){
     start = cv::getTickCount();
-    launchMatchTemplateGpu_withStaticSharedMemory_withLoopUnrolling(img, templ, result);
+    launchMatchTemplateGpu_withStaticSharedMemory_withLoopUnrolling(img, templ, result, block);
     end = cv::getTickCount();
     time += (i > 0) ? ((end - start) * f) : 0;
   }
@@ -380,7 +384,8 @@ void launchMatchTemplateGpu_withDynamicSharedMemory_withLoopUnrolling
 (
  cv::gpu::GpuMat& img,
  cv::gpu::GpuMat& templ,
- cv::gpu::GpuMat& result
+ cv::gpu::GpuMat& result,
+ const dim3 block
  )
 {
   cv::gpu::PtrStepSz<uchar> pImg =
@@ -392,7 +397,6 @@ void launchMatchTemplateGpu_withDynamicSharedMemory_withLoopUnrolling
   cv::gpu::PtrStepSz<float> pResult =
     cv::gpu::PtrStepSz<float>(result.rows, result.cols * result.channels(), result.ptr<float>(), result.step);
 
-  const dim3 block(64, 2);
   const dim3 grid(cv::gpu::divUp(result.cols, block.x), cv::gpu::divUp(result.rows, block.y));
   const size_t shared_mem_size = templ.cols*templ.rows*sizeof(uchar);
 
@@ -409,6 +413,7 @@ double launchMatchTemplateGpu_withDynamicSharedMemory_withLoopUnrolling
  cv::gpu::GpuMat& img, 
  cv::gpu::GpuMat& templ, 
  cv::gpu::GpuMat& result, 
+ const dim3 block,
  const int loop_num
  )
 {
@@ -417,7 +422,7 @@ double launchMatchTemplateGpu_withDynamicSharedMemory_withLoopUnrolling
   double time = 0.0;
   for (int i = 0; i <= loop_num; i++){
     start = cv::getTickCount();
-    launchMatchTemplateGpu_withDynamicSharedMemory_withLoopUnrolling(img, templ, result);
+    launchMatchTemplateGpu_withDynamicSharedMemory_withLoopUnrolling(img, templ, result, block);
     end = cv::getTickCount();
     time += (i > 0) ? ((end - start) * f) : 0;
   }
