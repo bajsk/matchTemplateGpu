@@ -42,7 +42,6 @@ void launchMatchTemplateGpu
     cv::gpu::PtrStepSz<float> pResult =
         cv::gpu::PtrStepSz<float>(result.rows, result.cols * result.channels(), result.ptr<float>(), result.step);
 
-    // const dim3 block = blockSize;
     const dim3 grid(cv::gpu::divUp(result.cols, block.x), cv::gpu::divUp(result.rows, block.y));
 
     matchTemplateGpu<<<grid, block>>>(pImg, pDst, pResult);
@@ -127,7 +126,6 @@ void launchMatchTemplateGpu_withStaticSharedMemory
   cv::gpu::PtrStepSz<float> pResult =
     cv::gpu::PtrStepSz<float>(result.rows, result.cols * result.channels(), result.ptr<float>(), result.step);
 
-  // const dim3 block(64, 2);
   const dim3 grid(cv::gpu::divUp(result.cols, block.x), cv::gpu::divUp(result.rows, block.y));
 
   matchTemplateGpu_withStaticSharedMemory<<<grid, block>>>(pImg, pDst, pResult);
@@ -212,7 +210,6 @@ void launchMatchTemplateGpu_withDynamicSharedMemory
   cv::gpu::PtrStepSz<float> pResult =
     cv::gpu::PtrStepSz<float>(result.rows, result.cols * result.channels(), result.ptr<float>(), result.step);
 
-  // const dim3 block(64, 2);
   const dim3 grid(cv::gpu::divUp(result.cols, block.x), cv::gpu::divUp(result.rows, block.y));
   const size_t shared_mem_size = templ.cols*templ.rows*sizeof(uchar);
 
@@ -308,7 +305,6 @@ void launchMatchTemplateGpu_withStaticSharedMemory_withLoopUnrolling
   cv::gpu::PtrStepSz<float> pResult =
     cv::gpu::PtrStepSz<float>(result.rows, result.cols * result.channels(), result.ptr<float>(), result.step);
 
-  // const dim3 block(64, 2);
   const dim3 grid(cv::gpu::divUp(result.cols, block.x), cv::gpu::divUp(result.rows, block.y));
 
   matchTemplateGpu_withStaticSharedMemory_withLoopUnrolling<<<grid, block>>>(pImg, pDst, pResult);
@@ -401,7 +397,6 @@ void launchMatchTemplateGpu_withDynamicSharedMemory_withLoopUnrolling
   cv::gpu::PtrStepSz<float> pResult =
     cv::gpu::PtrStepSz<float>(result.rows, result.cols * result.channels(), result.ptr<float>(), result.step);
 
-  // const dim3 block(64, 2);
   const dim3 grid(cv::gpu::divUp(result.cols, block.x), cv::gpu::divUp(result.rows, block.y));
   const size_t shared_mem_size = templ.cols*templ.rows*sizeof(uchar);
 
