@@ -54,11 +54,11 @@ int main(int argc, char *argv[])
     time = launchMatchTemplateGpu_withDynamicSharedMemory_withLoopUnrolling(d_img, d_templ, d_result5, block, loop_num);
     std::cout << "CUDA(withDynamicSharedMemory_withLoopUnrolling): " << time << " ms." << std::endl;
 
-    const dim3 block2 = dim3(256, 1);
+    const dim3 block2 = dim3(128, 1);
 
     // CUDA Implementation (dynamic shared memory with loop unrolling and different block size)
     time = launchMatchTemplateGpu_withDynamicSharedMemory_withLoopUnrolling(d_img, d_templ, d_result6, block2, loop_num);
-    std::cout << "CUDA(withDynamicSharedMemory_withLoopUnrolling_blockSize(256x1): " << time << " ms." << std::endl;
+    std::cout << "CUDA(withDynamicSharedMemory_withLoopUnrolling_blockSize(128x1): " << time << " ms." << std::endl;
 
 
     std::cout << std::endl;
