@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
     cv::gpu::GpuMat d_result4(corrSize, CV_32FC1, cv::Scalar(0.0f));
     cv::gpu::GpuMat d_result5(corrSize, CV_32FC1, cv::Scalar(0.0f));
     cv::gpu::GpuMat d_result6(corrSize, CV_32FC1, cv::Scalar(0.0f));
+    cv::gpu::GpuMat d_result7(corrSize, CV_32FC1, cv::Scalar(0.0f));
 
     const dim3 block = dim3(64, 2);
 
@@ -60,6 +61,9 @@ int main(int argc, char *argv[])
     time = launchMatchTemplateGpu_withDynamicSharedMemory_withLoopUnrolling(d_img, d_templ, d_result6, block2, loop_num);
     std::cout << "CUDA(withDynamicSharedMemory_withLoopUnrolling_blockSize(128x1): " << time << " ms." << std::endl;
 
+    // CUDA Implementation (dynamic shared memory with loop unrolling and different block size)
+    time = launchMatchTemplateGpu_withDynamicSharedMemory_withLoopUnrolling_readOnlyCache(d_img, d_templ, d_result7, block2, loop_num);
+    std::cout << "CUDA(withDynamicSharedMemory_withLoopUnrolling_blockSize_readOnlyCache(128x1): " << time << " ms." << std::endl;
 
     std::cout << std::endl;
 
@@ -69,6 +73,7 @@ int main(int argc, char *argv[])
     verify(d_result, d_result4);
     verify(d_result, d_result5);
     verify(d_result, d_result6);
+    verify(d_result, d_result7);
 
     return 0;
 }
